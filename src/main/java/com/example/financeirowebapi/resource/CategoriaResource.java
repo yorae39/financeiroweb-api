@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,7 +41,7 @@ public class CategoriaResource {
 
 	@ApiOperation(value = "Create categoria")
 	@RequestMapping(value = "/save", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Categoria> create(@RequestBody Categoria categoria, HttpServletResponse response) {
+	public ResponseEntity<Categoria> create(@Valid @RequestBody Categoria categoria, HttpServletResponse response) {
 
 		Categoria categoriaSalva = repository.save(categoria);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
@@ -51,7 +52,6 @@ public class CategoriaResource {
 	}
 
 	@ApiOperation(value = "Find categoria by id")
-	@ResponseStatus(HttpStatus.OK)
 	@RequestMapping(value = "/findById/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> findById(@PathVariable Long id) {		
 		Categoria categoria = repository.findOne(id);
