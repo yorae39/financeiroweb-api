@@ -1,12 +1,12 @@
 package com.example.financeirowebapi.resource;
 
-import java.net.URI;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.example.financeirowebapi.event.RecursoCriadoEvent;
 import com.example.financeirowebapi.model.Categoria;
 import com.example.financeirowebapi.repository.CategoriaRepository;
 
@@ -31,6 +31,9 @@ public class CategoriaResource {
 
 	@Autowired
 	CategoriaRepository repository;
+	
+	@Autowired
+    private ApplicationEventPublisher publisher;
 
 	@ApiOperation(value = "Find all categorias")
 	@ResponseStatus(HttpStatus.OK)
@@ -44,11 +47,10 @@ public class CategoriaResource {
 	public ResponseEntity<Categoria> create(@Valid @RequestBody Categoria categoria, HttpServletResponse response) {
 
 		Categoria categoriaSalva = repository.save(categoria);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
-				.buildAndExpand(categoriaSalva.getId()).toUri();
-		response.setHeader("Location", uri.toASCIIString());
+		
+		publisher.publishEvent(new RecursoCriadoEvent(this, response, categoriaSalva.getId()));
 
-		return ResponseEntity.created(uri).body(categoriaSalva);
+		return ResponseEntity.status(HttpStatus.CREATED).body(categoriaSalva);
 	}
 
 	@ApiOperation(value = "Find categoria by id")

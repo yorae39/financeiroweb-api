@@ -1,6 +1,5 @@
 package com.example.financeirowebapi.resource;
 
-import java.net.URI;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.example.financeirowebapi.event.RecursoCriadoEvent;
 import com.example.financeirowebapi.model.Pessoa;
 import com.example.financeirowebapi.repository.PessoaRepository;
 
@@ -35,6 +35,9 @@ public class PessoaResource {
     @Autowired
 	PessoaRepository repository;
 
+    @Autowired
+    private ApplicationEventPublisher publisher;
+    
 	@ApiOperation(value = "Find all pessoas")
 	@ResponseStatus(HttpStatus.OK)
 	@RequestMapping(value = "/findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -47,11 +50,9 @@ public class PessoaResource {
 	public ResponseEntity<Pessoa> create(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response) {
 
 		Pessoa pessoaSalva = repository.save(pessoa);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
-				.buildAndExpand(pessoaSalva.getId()).toUri();
-		response.setHeader("Location", uri.toASCIIString());
-
-		return ResponseEntity.created(uri).body(pessoaSalva);
+		
+		publisher.publishEvent(new RecursoCriadoEvent(this, response, pessoaSalva.getId()));
+		return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSalva);
 	}
 
 	@ApiOperation(value = "Find pessoa by id")
