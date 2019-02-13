@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.financeirowebapi.event.RecursoCriadoEvent;
 import com.example.financeirowebapi.model.Pessoa;
 import com.example.financeirowebapi.repository.PessoaRepository;
+import com.example.financeirowebapi.service.PessoaService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +35,9 @@ public class PessoaResource {
 
     @Autowired
 	PessoaRepository repository;
+    
+    @Autowired
+    PessoaService service;
 
     @Autowired
     private ApplicationEventPublisher publisher;
@@ -65,16 +69,12 @@ public class PessoaResource {
 	
 	@ApiOperation(value = "Update an existing pessoa")
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = "/update", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> update(@RequestBody Pessoa pessoa) {
-
-		final Date dataAtual = new Date();
-		final Format formatter = new SimpleDateFormat("dd-MM-yyyy");
-		final String data = formatter.format(dataAtual);
-		pessoa.setInfo("Pessoa updated on this date : " + data);
-		repository.save(pessoa);
+	@RequestMapping(value = "/update/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Pessoa> update(@PathVariable Long id, @RequestBody Pessoa pessoa) {
 		
-		return ResponseEntity.ok(pessoa.getInfo());
+		Pessoa pessoaSalva = service.pessoaAtualizar(id, pessoa);
+		
+		return ResponseEntity.ok(pessoaSalva);
 	}
 	
 	@ApiOperation(value = "Delete an existing pessoa")
