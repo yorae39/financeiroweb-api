@@ -31,7 +31,7 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
 		String msgUsuario = messageSource.getMessage("requisicao.invalida", null, LocaleContextHolder.getLocale());
 
-		String msgDesenvolvedor = ex.getCause().toString();
+		String msgDesenvolvedor = ex.getCause() != null ? ex.getCause().toString() : ex.toString();
 
 		List<Erro> erros = Arrays.asList(new Erro(msgUsuario, msgDesenvolvedor));
 

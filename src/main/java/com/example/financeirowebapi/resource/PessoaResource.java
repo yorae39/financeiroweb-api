@@ -77,6 +77,15 @@ public class PessoaResource {
 		return ResponseEntity.ok(pessoaSalva);
 	}
 	
+	
+	@ApiOperation(value = "Update status an existing pessoa")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@RequestMapping(value = "/update/{id}/ativo", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public void updatePropriedadeAtivo(@PathVariable Long id, @RequestBody Boolean ativo) {
+		
+		service.atualizarPropriedadeAtivo(id, ativo);
+	}
+	
 	@ApiOperation(value = "Delete an existing pessoa")
 	@ResponseStatus(HttpStatus.OK)
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)

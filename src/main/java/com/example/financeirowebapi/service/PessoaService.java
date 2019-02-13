@@ -20,11 +20,7 @@ public class PessoaService {
 
 	public Pessoa pessoaAtualizar(Long id, Pessoa pessoa) {
 
-		Pessoa pessoaSalva = repository.findOne(id);
-
-		if (pessoaSalva == null) {
-			throw new EmptyResultDataAccessException(1);
-		}
+		Pessoa pessoaSalva = buscarPessoaPeloId(id);
 
 		BeanUtils.copyProperties(pessoa, pessoaSalva, "id");
 
@@ -34,6 +30,28 @@ public class PessoaService {
 		pessoaSalva.setInfo("Pessoa updated on this date : " + data);
 
 		return repository.save(pessoaSalva);
+	}
+
+
+	public void atualizarPropriedadeAtivo(Long id, Boolean ativo) {
+		
+		Pessoa pessoaSalva = buscarPessoaPeloId(id);
+		
+		pessoaSalva.setAtivo(ativo);
+		
+		repository.save(pessoaSalva);
+		
+	}
+	
+
+	private Pessoa buscarPessoaPeloId(Long id) {
+		
+		Pessoa pessoaSalva = repository.findOne(id);
+
+		if (pessoaSalva == null) {
+			throw new EmptyResultDataAccessException(1);
+		}
+		return pessoaSalva;
 	}
 
 }
