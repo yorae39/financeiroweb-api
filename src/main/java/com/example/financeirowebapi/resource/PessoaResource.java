@@ -77,4 +77,18 @@ public class PessoaResource {
 		return ResponseEntity.ok(pessoa.getInfo());
 	}
 	
+	@ApiOperation(value = "Delete an existing pessoa")
+	@ResponseStatus(HttpStatus.OK)
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+	public ResponseEntity<String> delete(@PathVariable(value = "id") Long id) {
+
+		final Date dataAtual = new Date();
+		final Format formatter = new SimpleDateFormat("dd-MM-yyyy");
+		final String data = formatter.format(dataAtual);
+		String info = "Pessoa id: "+id+" removed in " + data;
+		repository.delete(id);
+		
+		return ResponseEntity.ok(info);
+	}
+	
 }
