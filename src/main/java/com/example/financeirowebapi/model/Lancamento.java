@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import javax.persistence.Column;
-import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -15,8 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-
-import com.example.financeirowebapi.converter.LocalDateConverter;
 
 @Entity
 @Table(name = "lancamento")
@@ -29,10 +26,9 @@ public class Lancamento implements Serializable {
 	private Long id;
 	private String descricao;
 	@Column(name = "data_vencimento")
-	@Convert(converter = LocalDateConverter.class)
+	//@Convert(converter = LocalDateConverter.class) //CASO QUEIRA USAR UM CONVERTER...
 	private LocalDate dataVencimento;
 	@Column(name = "data_pagamento")
-	@Convert(converter = LocalDateConverter.class)
 	private LocalDate dataPagamento;
 	private BigDecimal valor;
 	private String observacao;

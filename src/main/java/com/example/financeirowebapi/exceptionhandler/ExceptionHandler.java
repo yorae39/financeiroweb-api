@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -21,6 +23,10 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class ExceptionHandler extends ResponseEntityExceptionHandler {
+	
+	/*CLASSE PARA TRATAR AS EXCEÇÕES DO SISTEMA! 
+	  VERIFICAR COM A EXCEPTION E ENTÃO TRATÁ-LA DE ACORDO...
+	 */
 
 	@Autowired
 	private MessageSource messageSource;
@@ -71,6 +77,18 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 
 		List<Erro> erros = Arrays.asList(new Erro(msgUsuario, msgDesenvolvedor));
 
+		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+	}
+	
+	@org.springframework.web.bind.annotation.ExceptionHandler({EntityNotFoundException.class})
+	public ResponseEntity<Object> handleEntityNotFound(EntityNotFoundException ex, WebRequest request) {
+		
+		String msgUsuario = messageSource.getMessage("recurso.nao-encontrado", null, LocaleContextHolder.getLocale());
+
+		String msgDesenvolvedor = ex.toString();
+
+		List<Erro> erros = Arrays.asList(new Erro(msgUsuario, msgDesenvolvedor));
+		
 		return handleExceptionInternal(ex, erros, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
 	}
 
