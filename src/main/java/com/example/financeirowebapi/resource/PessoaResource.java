@@ -64,8 +64,7 @@ public class PessoaResource {
 	public ResponseEntity<?> findById(@PathVariable Long id) {		
 		Pessoa pessoa = repository.findOne(id);
 		return pessoa == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(pessoa);
-	}
-	
+	}	
 	
 	@ApiOperation(value = "Update an existing pessoa")
 	@ResponseStatus(HttpStatus.OK)
@@ -75,8 +74,7 @@ public class PessoaResource {
 		Pessoa pessoaSalva = service.pessoaAtualizar(id, pessoa);
 		
 		return ResponseEntity.ok(pessoaSalva);
-	}
-	
+	}	
 	
 	@ApiOperation(value = "Update status an existing pessoa")
 	@ResponseStatus(HttpStatus.NO_CONTENT)

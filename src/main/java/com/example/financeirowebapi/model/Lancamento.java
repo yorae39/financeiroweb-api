@@ -2,9 +2,10 @@ package com.example.financeirowebapi.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -15,33 +16,37 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.example.financeirowebapi.converter.LocalDateConverter;
+
 @Entity
 @Table(name = "lancamento")
-public class Lancamento implements Serializable{
+public class Lancamento implements Serializable {
 
 	private static final long serialVersionUID = -5105517627986763330L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;	
+	private Long id;
 	private String descricao;
 	@Column(name = "data_vencimento")
-	private Date datVencimento;
+	@Convert(converter = LocalDateConverter.class)
+	private LocalDate dataVencimento;
 	@Column(name = "data_pagamento")
-	private Date dataPagamento;	
-	private BigDecimal valor;	
+	@Convert(converter = LocalDateConverter.class)
+	private LocalDate dataPagamento;
+	private BigDecimal valor;
 	private String observacao;
 	@Enumerated(EnumType.STRING)
-	private TipoLancamento tipoLancamento;
+	private TipoLancamento tipo;
 	@ManyToOne
 	@JoinColumn(name = "id_categoria")
 	private Categoria categoria;
 	@ManyToOne
 	@JoinColumn(name = "id_pessoa")
 	private Pessoa pessoa;
-	
+
 	public Lancamento() {
-		
+
 	}
 
 	public Long getId() {
@@ -60,19 +65,19 @@ public class Lancamento implements Serializable{
 		this.descricao = descricao;
 	}
 
-	public Date getDatVencimento() {
-		return datVencimento;
+	public LocalDate getDataVencimento() {
+		return dataVencimento;
 	}
 
-	public void setDatVencimento(Date datVencimento) {
-		this.datVencimento = datVencimento;
+	public void setDataVencimento(LocalDate dataVencimento) {
+		this.dataVencimento = dataVencimento;
 	}
 
-	public Date getDataPagamento() {
+	public LocalDate getDataPagamento() {
 		return dataPagamento;
 	}
 
-	public void setDataPagamento(Date dataPagamento) {
+	public void setDataPagamento(LocalDate dataPagamento) {
 		this.dataPagamento = dataPagamento;
 	}
 
@@ -92,12 +97,12 @@ public class Lancamento implements Serializable{
 		this.observacao = observacao;
 	}
 
-	public TipoLancamento getTipoLancamento() {
-		return tipoLancamento;
+	public TipoLancamento getTipo() {
+		return tipo;
 	}
 
-	public void setTipoLancamento(TipoLancamento tipoLancamento) {
-		this.tipoLancamento = tipoLancamento;
+	public void setTipo(TipoLancamento tipo) {
+		this.tipo = tipo;
 	}
 
 	public Categoria getCategoria() {
@@ -143,10 +148,9 @@ public class Lancamento implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Lancamento [id=" + id + ", descricao=" + descricao + ", datVencimento=" + datVencimento
+		return "Lancamento [id=" + id + ", descricao=" + descricao + ", dataVencimento=" + dataVencimento
 				+ ", dataPagamento=" + dataPagamento + ", valor=" + valor + ", observacao=" + observacao
-				+ ", tipoLancamento=" + tipoLancamento + ", categoria=" + categoria + ", pessoa=" + pessoa + "]";
+				+ ", tipo=" + tipo + ", categoria=" + categoria + ", pessoa=" + pessoa + "]";
 	}
-	
-	
+
 }
