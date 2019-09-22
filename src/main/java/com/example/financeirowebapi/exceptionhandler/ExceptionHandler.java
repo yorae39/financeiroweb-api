@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -85,7 +86,9 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
 		
 		String msgUsuario = messageSource.getMessage("recurso.nao-encontrado", null, LocaleContextHolder.getLocale());
 
-		String msgDesenvolvedor = ex.toString();
+		//String msgDesenvolvedor = ex.toString();//PEGA O CAMINHO COMPLETO DA EXCEÇÃO
+
+		String msgDesenvolvedor = ExceptionUtils.getRootCauseMessage(ex);
 
 		List<Erro> erros = Arrays.asList(new Erro(msgUsuario, msgDesenvolvedor));
 		

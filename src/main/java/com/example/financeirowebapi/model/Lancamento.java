@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "lancamento")
@@ -24,19 +25,26 @@ public class Lancamento implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@NotNull
 	private String descricao;
+	@NotNull
 	@Column(name = "data_vencimento")
-	//@Convert(converter = LocalDateConverter.class) //CASO QUEIRA USAR UM CONVERTER...
+	//@Convert(converter = LocalDateConverter.class) //EX USANDO UM CONVERTER TRAZ A DATA COMPLETA
 	private LocalDate dataVencimento;
+	@NotNull
 	@Column(name = "data_pagamento")
 	private LocalDate dataPagamento;
+	@NotNull
 	private BigDecimal valor;
 	private String observacao;
+	@NotNull
 	@Enumerated(EnumType.STRING)
 	private TipoLancamento tipo;
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "id_categoria")
 	private Categoria categoria;
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "id_pessoa")
 	private Pessoa pessoa;

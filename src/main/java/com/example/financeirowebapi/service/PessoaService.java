@@ -16,7 +16,7 @@ import com.example.financeirowebapi.repository.PessoaRepository;
 public class PessoaService {
 
 	@Autowired
-	PessoaRepository repository;
+	private PessoaRepository repository;
 
 	public Pessoa pessoaAtualizar(Long id, Pessoa pessoa) {
 
@@ -39,7 +39,7 @@ public class PessoaService {
 		
 		pessoaSalva.setAtivo(ativo);
 		
-		repository.save(pessoaSalva);
+		repository.saveAndFlush(pessoaSalva);
 		
 	}
 	
