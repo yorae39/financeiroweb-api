@@ -25,6 +25,7 @@ import com.example.financeirowebapi.event.RecursoCriadoEvent;
 import com.example.financeirowebapi.exceptionhandler.ExceptionHandler.Erro;
 import com.example.financeirowebapi.model.Lancamento;
 import com.example.financeirowebapi.repository.LancamentoRepository;
+import com.example.financeirowebapi.repository.filter.LancamentoFilter;
 import com.example.financeirowebapi.service.LancamentoService;
 import com.example.financeirowebapi.service.exception.PessoaInexistenteOuInativaException;
 
@@ -55,6 +56,13 @@ public class LancamentoResource {
 	@RequestMapping(value = "/findAll", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Lancamento> findAll() {
 		return repository.findAll();
+	}
+	
+	@ApiOperation(value = "Find all lançamentos - metamodelo")
+	@ResponseStatus(HttpStatus.OK)
+	@RequestMapping(value = "/pesquisar", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+	public List<Lancamento> pesquisar(LancamentoFilter lancamentoFilter) {
+		return repository.filtar(lancamentoFilter);
 	}
 
 	@ApiOperation(value = "Find lançamento by id")

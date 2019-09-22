@@ -1,3 +1,44 @@
---PAREI NA AULA 4.1 - MAS FALTA ASSISTIR A  2.1 
+--PAREI NA AULA 5.7 - MAS FALTA ASSISTIR A  2.1 
 
 http://localhost:8080/swagger-ui.html
+
+ROTEIRO:
+-------
+1 - Arquitetura:
+  A. SpringFrameork --> Spring MVC ; Spring Data; Spring Security; Spring OAuth.
+  B. Sprint Tool Suite.
+  C. Postman; Swagger.
+  D. MySql; PostgreSQL; Oracle.
+
+2 - Conceitos HTTP:
+  A. Verbos -> GET, POSt, PUT.
+  B. URL: http://host .... ->Onde sestá o serviço ou recurso a ser consultado.
+  C. Headers: Informações a mais...
+  D. Parametros: query string (na url)
+  E. Notação (Ex. Json)
+  
+3 - Configura arquitetura REST:
+  A. Quando usa os verbos HTTP
+  B. Usa os códigos de retorno como 200 OK.
+
+4 - REST completo:
+  A. No corpo da resposta vem links --> HATEOAS
+  B. Spring HATEOAS -> Acrescenta complexidade de acoplamento
+  
+5 - Segurança da API:
+  A. Depende do quanto se quer que seja segura! Quanto maior segurança mais caro.
+  B. Qual informação eu quero proteger? Vale a pena? 
+  C. Roda inter ou intra?
+  D. HTTPS --> Seguro.
+
+6 - Criação do banco.
+  A. Aconselhável por script.
+  B. Uso do flyway.
+-- ------------------------------------------------------------------------------------
+Metamodel: Analisa as entidades e cria uma classe que tenha um atributo estático
+em relação ao objeto real;
+Projeto / properties / java compiler / Annotation Processing --> clicar em Enable
+Generated source directory: src/main/java
+FactoryPath --> clicar em Enable / clicar em add jar externo
+
+C:\Users\Luiz Paulo\.m2\repository\org\hibernate\hibernate-jpamodelgen\5.2.17.Final
