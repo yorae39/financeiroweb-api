@@ -1,6 +1,9 @@
 package com.example.financeirowebapi.resource;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -10,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -58,11 +63,11 @@ public class LancamentoResource {
 		return repository.findAll();
 	}
 	
-	@ApiOperation(value = "Find all lançamentos - metamodelo")
+	@ApiOperation(value = "Find lançamentos by criteria - metamodelo")
 	@ResponseStatus(HttpStatus.OK)
 	@RequestMapping(value = "/pesquisar", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Lancamento> pesquisar(LancamentoFilter lancamentoFilter) {
-		return repository.filtar(lancamentoFilter);
+	public Page<Lancamento> pesquisar(LancamentoFilter lancamentoFilter, Pageable pageable) {
+		return repository.filtar(lancamentoFilter, pageable);
 	}
 
 	@ApiOperation(value = "Find lançamento by id")
@@ -72,15 +77,25 @@ public class LancamentoResource {
 		return lancamento == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(lancamento);
 	}
 	
-
 	@ApiOperation(value = "Create lançamento")
 	@RequestMapping(value = "/save", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Lancamento> create(@Valid @RequestBody Lancamento lancamento, HttpServletResponse response) {	
-		Lancamento lancamentoSalvo = service.salvar(lancamento);
-		
+		Lancamento lancamentoSalvo = service.salvar(lancamento);		
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, lancamentoSalvo.getId()));
-
 		return ResponseEntity.status(HttpStatus.CREATED).body(lancamentoSalvo);
+	}
+	
+	@ApiOperation(value = "Delete an existing lançamento")
+	@ResponseStatus(HttpStatus.OK)
+	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+	public  ResponseEntity<String> delete(@PathVariable(value = "id") Long id) {	
+		final Date dataAtual = new Date();
+		final Format formatter = new SimpleDateFormat("dd-MM-yyyy");
+		final String data = formatter.format(dataAtual);
+		String info = "Lançamento id: "+id+" removed in " + data;
+		repository.delete(id);
+		
+		return ResponseEntity.ok(info);
 	}
 	
 	@ExceptionHandler({PessoaInexistenteOuInativaException.class})

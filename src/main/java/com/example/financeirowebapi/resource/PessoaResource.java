@@ -52,9 +52,7 @@ public class PessoaResource {
 	@ApiOperation(value = "Create pessoa")
 	@RequestMapping(value = "/save", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Pessoa> create(@Valid @RequestBody Pessoa pessoa, HttpServletResponse response) {
-
 		Pessoa pessoaSalva = repository.save(pessoa);
-		
 		publisher.publishEvent(new RecursoCriadoEvent(this, response, pessoaSalva.getId()));
 		return ResponseEntity.status(HttpStatus.CREATED).body(pessoaSalva);
 	}
@@ -69,22 +67,17 @@ public class PessoaResource {
 	@ApiOperation(value = "Update an existing pessoa")
 	@ResponseStatus(HttpStatus.OK)
 	@RequestMapping(value = "/update/{id}", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Pessoa> update(@PathVariable Long id, @RequestBody Pessoa pessoa) {
-		
-		Pessoa pessoaSalva = service.pessoaAtualizar(id, pessoa);
-		
+	public ResponseEntity<Pessoa> update(@PathVariable Long id, @RequestBody Pessoa pessoa) {		
+		Pessoa pessoaSalva = service.pessoaAtualizar(id, pessoa);		
 		return ResponseEntity.ok(pessoaSalva);
 	}	
 	
 	@ApiOperation(value = "Update status an existing pessoa")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@RequestMapping(value = "/update/{id}/ativo", method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> updatePropriedadeAtivo(@PathVariable Long id, @RequestBody Boolean ativo) {
-		
-		 service.atualizarPropriedadeAtivo(id, ativo);
-		
-		 String info = "Pessoa id: "+id+" updated ativo for " + ativo;
-		 
+	public ResponseEntity<String> updatePropriedadeAtivo(@PathVariable Long id, @RequestBody Boolean ativo) {		
+		 service.atualizarPropriedadeAtivo(id, ativo);		
+		 String info = "Pessoa id: "+id+" updated ativo for " + ativo;		 
 		 return  ResponseEntity.ok(info);
 	}
 	
@@ -92,7 +85,6 @@ public class PessoaResource {
 	@ResponseStatus(HttpStatus.OK)
 	@RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
 	public ResponseEntity<String> delete(@PathVariable(value = "id") Long id) {
-
 		final Date dataAtual = new Date();
 		final Format formatter = new SimpleDateFormat("dd-MM-yyyy");
 		final String data = formatter.format(dataAtual);
