@@ -2,6 +2,7 @@ package com.example.financeirowebapi.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,7 +24,16 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-			.antMatchers("/categorias/findAll").permitAll()
+			.antMatchers( HttpMethod.GET,
+                    "/",
+                    "/v2/api-docs",           // swagger
+                    "/webjars/**",            // swagger-ui webjars
+                    "/swagger-resources/**",  // swagger-ui resources
+                    "/configuration/**",      // swagger configuration
+                    "/*.html",
+                    "/favicon.ico",
+                    "/**/*.html",
+                    "/categorias/findAll").permitAll()
 			.anyRequest().authenticated()
 			.and().sessionManagement()
 			.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
